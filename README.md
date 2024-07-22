@@ -190,8 +190,8 @@ What you need to know:
   for frame in (frame_name1, frame_name3, frame_name3)
   ```  
   You don't have to do anything else actually to add pages.
-* I use 2 buttons: 
-   Buttons used as "Joystick"-Buttons
+* I use 2 buttons:
+  Buttons used as "Joystick"-Buttons
    ```
    i_flight_movement_gear_up_icon = resize_image("flight-movement_gear-up-icon.png", i_width, i_height)
    button_name=create_button(frame_name, "", i_flight_movement_gear_up_icon, trigger, i_width, i_height)
@@ -203,7 +203,7 @@ What you need to know:
    third line declares the place on the page where the button should be. There are 4 rows and 7 columns available.
    fourth line is to ingrement the trigger-number. At the beginning of every page I declare the trigger a specific number. In case I f*** up in the code I would not have to assign every button again... just max. 28. first frame starts with button 30 to have a little bit of spare buttons in case I want to .. I don't know why actually.
 
-   BUttons used to change between pages:
+   And Buttons used to change between pages:
    ```
    i_general_ui_settings = resize_image("general-ui-settings.png", i_width, i_height)
    button_Settings=tkinter.Button(frame_name, text="", image=i_general_ui_settings, compound="center", command=lambda:raise_frame(frame_Settings), font=(b_font, b_font_size,     b_font_type), width=b_width, height=b_height, foreground=b_c_text, activeforeground=b_c_text, background=b_c_bg, activebackground=b_c_bg, border=b_b, highlightthickness=b_hl_t)
