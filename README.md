@@ -2,6 +2,8 @@
 Disclaimer: This is my first published project ever, so expect the worst and maybe you will be surprised (but I wouldn't count on it)
 This is the repository of a 4-Axis Star Citizen Controller using a Raspberry pi and a Touchscreen as a Macropad
 
+<img src="https://github.com/Haskar/Star_Citizen_Controller/blob/main/Screenshot%202024-07-22%20123810.png" width=800/>
+
 ## Intro and credits
 The work is based on a controller by [Tinker Player Solder Pi](https://www.youtube.com/@TinkerPlayerSolderPi) 
 I used the footage of his controller as a loose guide:
@@ -52,3 +54,5 @@ sidenote: this is my first schematic drawn with fritzing
 
 ### Step2: Software
 #### Arduino
+Write the [Star_Citizen_Controller.ino](https://github.com/Haskar/Star_Citizen_Controller/blob/main/Star_Citizen_Controller.ino) to your Arduino. It will create 4 Joysticks with 120 buttons each (up to 4 Joysticks work "stable" on windows). With one Gimbal on joystick 1 and the other Gimbal on joystick 2, the other joysticks are only there for the additional buttons. Buttons are automatically assigned to the joysticks. Currently Star Citizen allows up to 128 buttons per joystick.
+
