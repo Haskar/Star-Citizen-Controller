@@ -24,8 +24,7 @@ some cables, some connectors, a prototype-boards or a breadboard, ... you will f
 ## Instructions
 ### Step1: Hardware
 <img src="https://github.com/Haskar/Star_Citizen_Controller/blob/main/Screenshot%202024-07-22%20123810.png" width=800/>
-
-my first schematic drawn with fritzing
+sidenote: this is my first schematic drawn with fritzing
 
 #### Wiring the joysticks: 
 Arduino 5V - Taranis M7 red wire
