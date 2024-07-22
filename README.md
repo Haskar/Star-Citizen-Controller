@@ -2,7 +2,7 @@
 Disclaimer: This is my first published project ever, so expect the worst and maybe you will be surprised (but I wouldn't count on it)
 This is the repository of a 4-Axis Star Citizen Controller using a Raspberry pi and a Touchscreen as a Macropad
 
-<img src="https://github.com/Haskar/Star_Citizen_Controller/blob/main/bd804097-d34a-4821-94e8-2e508bc554db.jpg" width=800/>
+<img src="https://github.com/Haskar/Star_Citizen_Controller/blob/7c51cf232cdad70b0568458f5b99c814c59720e9/pictures/bd804097-d34a-4821-94e8-2e508bc554db.jpg" width=800/>
 
 ## Intro and credits
 The work is based on a controller by [Tinker Player Solder Pi](https://www.youtube.com/@TinkerPlayerSolderPi) 
@@ -25,7 +25,7 @@ some cables, some connectors, a prototype-boards or a breadboard, ... you will f
 
 ## Instructions
 ### Step1: Hardware
-<img src="https://github.com/Haskar/Star_Citizen_Controller/blob/main/Screenshot%202024-07-22%20123810.png" width=800/>
+<img src="https://github.com/Haskar/Star_Citizen_Controller/blob/7c51cf232cdad70b0568458f5b99c814c59720e9/pictures/Screenshot%202024-07-22%20123810.png" width=800/>
 sidenote: this is my first schematic drawn with fritzing
 
 #### Wiring the joysticks: 
@@ -52,7 +52,30 @@ sidenote: this is my first schematic drawn with fritzing
 * Raspberry Pi GND (Pin 14) - Button (Pin 1)
 * Raspberry Pi GPIO 3 (Pin 5) - Button (Pin 2)
 
+#### Misc: 
+* Raspberry Pi 5V (Pin 2), Raspberry Pi 5V (Pin 4) and Raspberry Pi GND (Pin 6) will be connected to the Touchscreen
+* Raspberry Pi USB-Port will be connected to the Touchscreen (for the Touch functionality)
+* Raspberry Pi HDMI Port will be connected to the Touchscreen
+
 ### Step2: Software
 #### Arduino
 Write the [Star_Citizen_Controller.ino](https://github.com/Haskar/Star_Citizen_Controller/blob/main/Star_Citizen_Controller.ino) to your Arduino. It will create 4 Joysticks with 120 buttons each (up to 4 Joysticks work "stable" on windows). With one Gimbal on joystick 1 and the other Gimbal on joystick 2, the other joysticks are only there for the additional buttons. Buttons are automatically assigned to the joysticks. Currently Star Citizen allows up to 128 buttons per joystick.
 
+#### Raspberry Pi
+Now this is where it gets messy
+Start with a standard Raspbian Image. Activate SSH, VNC and Serial Port using
+```bash
+sudo raspi-config
+```
+
+Create a folder for the python script in your home directory
+```bash
+mkdir controller
+```
+
+and a subfolder for the images
+```bash
+cd controller
+mkdir images
+```
+copy 
