@@ -50,5 +50,5 @@ sidenote: this is my first schematic drawn with fritzing
 * Raspberry Pi GND (Pin 14) - Button (Pin 1)
 * Raspberry Pi GPIO 3 (Pin 5) - Button (Pin 2)
 
-
-
+### Step2: Software
+#### Arduino
