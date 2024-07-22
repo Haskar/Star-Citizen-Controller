@@ -27,28 +27,28 @@ some cables, some connectors, a prototype-boards or a breadboard, ... you will f
 sidenote: this is my first schematic drawn with fritzing
 
 #### Wiring the joysticks: 
-Arduino 5V - Taranis M7 red wire
-Arduino GND - Taranis M7 (1 and 2) black wire
-Arduino GND - Taranis M7 (1 and 2) black wire
-Arduino A0 - Taranis M7 (1) yellow wire (my be a different color for you)
-Arduino A1 - Taranis M7 (1) green wire (my be a different color for you)
-Arduino A2 - Taranis M7 (2) yellow wire (my be a different color for you)
-Arduino A3 - Taranis M7 (2) green wire (my be a different color for you)
+* Arduino 5V - Taranis M7 red wire
+* Arduino GND - Taranis M7 (1 and 2) black wire
+* Arduino GND - Taranis M7 (1 and 2) black wire
+* Arduino A0 - Taranis M7 (1) yellow wire (my be a different color for you)
+* Arduino A1 - Taranis M7 (1) green wire (my be a different color for you)
+* Arduino A2 - Taranis M7 (2) yellow wire (my be a different color for you)
+* Arduino A3 - Taranis M7 (2) green wire (my be a different color for you)
 
 #### Wiring the serial connection Arduino/Raspberry Pi: 
-Arduino 5V - Logic Converter HV
-Arduino GND - Logic Converter GND
-Arduino TX - Logic Converter TX (HV side)
-Arduino RX - Logic Converter RX (HV side)
+* Arduino 5V - Logic Converter HV
+* Arduino GND - Logic Converter GND
+* Arduino TX - Logic Converter TX (HV side)
+* Arduino RX - Logic Converter RX (HV side)
 
-Raspberry Pi 3V (Pin 1) - Logic Converter LV
-Raspberry Pi GND (Pin 9) - Logic Converter GND (LV side, not sure if this is necessary or best practice as I have seen diagrams with only one GND being used)
-Raspberry Pi TX (Pin 8) - Logic Converter RX (LV side) - this is intentionally connected TX to RX
-Raspberry Pi RX (Pin 10) - Logic Converter TX (LV side) - this is intentionally connected RX to TX
+* Raspberry Pi 3V (Pin 1) - Logic Converter LV
+* Raspberry Pi GND (Pin 9) - Logic Converter GND (LV side, not sure if this is necessary or best practice as I have seen diagrams with only one GND being used)
+* Raspberry Pi TX (Pin 8) - Logic Converter RX (LV side) - this is intentionally connected TX to RX
+* Raspberry Pi RX (Pin 10) - Logic Converter TX (LV side) - this is intentionally connected RX to TX
 
 #### Wiring the Boot-Button: 
-Raspberry Pi GND (Pin 14) - Button (Pin 1)
-Raspberry Pi GPIO 3 (Pin 5) - Button (Pin 2)
+* Raspberry Pi GND (Pin 14) - Button (Pin 1)
+* Raspberry Pi GPIO 3 (Pin 5) - Button (Pin 2)
 
 
 
