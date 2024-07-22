@@ -176,13 +176,14 @@ This is my first "working" python script using tkinter. It is ugly and I don't l
 You will have to change the code if you want to make the GUI the way you want it.
 What you need to know: 
 * every "page" is a frame.
-* every frame can have 4*7 buttons (that's 28)
+* every frame can have 4x7 buttons (that's 28)
 * this is how a frame is declared:
   ```
   frame_name= tkinter.Frame(master)
-  frame014.configure(background=b_c_bg)
+  frame_name.configure(background=b_c_bg)
   ```
   The second line is optional.
+  You will see that I use "frame_XXX" for my pages
   
   You will have to put it in the array of frames:
   ```
@@ -190,12 +191,33 @@ What you need to know:
   ```  
   You don't have to do anything else actually to add pages.
 * I use 2 buttons: 
+   Buttons used as "Joystick"-Buttons
    ```
    i_flight_movement_gear_up_icon = resize_image("flight-movement_gear-up-icon.png", i_width, i_height)
-   button_001_12=create_button(frame001, "", i_flight_movement_gear_up_icon, trigger, i_width, i_height)
-   button_001_12.grid(row=1,column=2)
+   button_name=create_button(frame_name, "", i_flight_movement_gear_up_icon, trigger, i_width, i_height)
+   button_name.grid(row=1,column=2)
    trigger = trigger+1
    ```
-   first line
+   first line is to declare the image. I even left that in for those who still don't want to buy that coffee.
+   second line is the declaration of the button. The function takes the name of the frame where the button should be, the image, a trigger-number (this will be the button number on the joystick), width and height
+   third line declares the place on the page where the button should be. There are 4 rows and 7 columns available.
+   fourth line is to ingrement the trigger-number. At the beginning of every page I declare the trigger a specific number. In case I f*** up in the code I would not have to assign every button again... just max. 28. first frame starts with button 30 to have a little bit of spare buttons in case I want to .. I don't know why actually.
+
+   BUttons used to change between pages:
+   ```
+   i_general_ui_settings = resize_image("general-ui-settings.png", i_width, i_height)
+   button_Settings=tkinter.Button(frame_name, text="", image=i_general_ui_settings, compound="center", command=lambda:raise_frame(frame_Settings), font=(b_font, b_font_size,     b_font_type), width=b_width, height=b_height, foreground=b_c_text, activeforeground=b_c_text, background=b_c_bg, activebackground=b_c_bg, border=b_b, highlightthickness=b_hl_t)
+   button_Settings.grid(row=1,column=7)
+   ```
+   This button will switch to the "frame_Settings" page.
+
+   There is actually a third button type which does both. The Button that activates the Salvage Mode will also switch to a page with all Salvage Mode Buttons. 
+
+* The 4x7 buttons grid will only be a 4x7 buttons grid_ if you have a button ... or something like a button in every cell of one column and one row. Thats why you will find Dummy Buttons... especially on the settings-page :
+   ```
+   button_dummy=create_button(frame_Settings, "", i_empty, 255, i_width, i_height)
+   button_dummy.grid(row=2,column=1)
+   ```
+
 
   
