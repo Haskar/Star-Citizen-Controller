@@ -98,18 +98,11 @@ mkdir images
 ```
 while currently in the controller folder download the python script
 ```bash
-wget https://github.com/Haskar/Star_Citizen_Controller/blob/713848e760347bb48a67777979dcc065e503b604/Raspberry%20Pi/controller/controller.py
-```
-then go to your images folder and download the "sample image"
-```bash
-cd images
-https://github.com/Haskar/Star_Citizen_Controller/blob/b7ad4dfabad1206d7526e9e06b6d0be5ae7533fa/Raspberry%20Pi/controller/images/empty.png
-```
-
-or, if you bought KorneliusVonTastik a coffee (or five ... ) you can download the python script with some sample images and use samba to copy the colorscheme of your choice to the image folder.
-```bash
 wget https://github.com/Haskar/Star_Citizen_Controller/blob/713848e760347bb48a67777979dcc065e503b604/Raspberry%20Pi/controller/controller%20-%20KVT.py
 ```
+then change to the image folder and copy the desired color scheme of KorneliusVonTastik icons to it. There should be just files in that folder. No subfolders. 
+
+
 ##### Autostart Python Script 
 Quick and dirty: 
 ```bash
