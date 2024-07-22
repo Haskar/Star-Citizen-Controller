@@ -213,7 +213,7 @@ What you need to know:
 
    There is actually a third button type which does both. The Button that activates the Salvage Mode will also switch to a page with all Salvage Mode Buttons. 
 
-* The 4x7 buttons grid will only be a 4x7 buttons grid_ if you have a button ... or something like a button in every cell of one column and one row. Thats why you will find Dummy Buttons... especially on the settings-page :
+* The 4x7 buttons grid will only be a 4x7 buttons grid if you have a button ... or something like a button in every cell of one column AND one row. Thats why you will find Dummy Buttons... especially on the settings-page :
    ```
    button_dummy=create_button(frame_Settings, "", i_empty, 255, i_width, i_height)
    button_dummy.grid(row=2,column=1)
