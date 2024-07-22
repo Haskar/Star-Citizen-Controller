@@ -98,7 +98,8 @@ mkdir images
 ```
 while currently in the controller folder download the python script
 ```bash
-wget https://github.com/Haskar/Star_Citizen_Controller/blob/713848e760347bb48a67777979dcc065e503b604/Raspberry%20Pi/controller/controller%20-%20KVT.py
+wget https://github.com/Haskar/Star_Citizen_Controller/blob/73856a0640aa27e27cd1c83eb386a9308fdb30a8/Raspberry%20Pi/controller/controller.py
+sudo chmod +x controller.py
 ```
 then change to the image folder and copy the desired color scheme of KorneliusVonTastik icons to it. There should be just files in that folder. No subfolders. 
 
