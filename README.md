@@ -86,6 +86,7 @@ minicom -b 115200 -o -D /dev/ttyS0
 Optional: Install Samba for an easier transfer of files (Images for example)
 
 Download  the [UAV-OSD-Sans-Mono font](https://www.dafont.com/uav-osd-sans.font) and copy it to ~/.fonts/ (create that folder if it doesn't exist)
+[Disable Screen Blanking](https://github.com/raspberrypi/documentation/blob/develop/documentation/asciidoc/computers/configuration/screensaver.adoc)
 
 ##### Python Script
 Create a folder for the python script in your home directory
