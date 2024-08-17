@@ -39,10 +39,10 @@ sidenote: this is my first schematic drawn with fritzing
 * Arduino 5V - Taranis M7 red wire
 * Arduino GND - Taranis M7 (1 and 2) black wire
 * Arduino GND - Taranis M7 (1 and 2) black wire
-* Arduino A0 - Taranis M7 (1) yellow wire (my be a different color for you)
-* Arduino A1 - Taranis M7 (1) green wire (my be a different color for you)
-* Arduino A2 - Taranis M7 (2) yellow wire (my be a different color for you)
-* Arduino A3 - Taranis M7 (2) green wire (my be a different color for you)
+* Arduino A0 - Taranis M7 (1) yellow wire (may be a different color for you)
+* Arduino A1 - Taranis M7 (1) green wire (may be a different color for you)
+* Arduino A2 - Taranis M7 (2) yellow wire (may be a different color for you)
+* Arduino A3 - Taranis M7 (2) green wire (may be a different color for you)
 
 #### Wiring the serial connection Arduino/Raspberry Pi: 
 * Arduino 5V - Logic Converter HV
@@ -67,6 +67,15 @@ sidenote: this is my first schematic drawn with fritzing
 ### Step2: Software
 #### Arduino
 Write the [Star_Citizen_Controller.ino](https://github.com/Haskar/Star_Citizen_Controller/blob/713848e760347bb48a67777979dcc065e503b604/Arduino/Star_Citizen_Controller.ino) to your Arduino. Once restarted it will create 4 Joysticks with 120 buttons each (up to 4 Joysticks work "stable" on windows). With one X- and Y-Axis  on joystick 1 and one X- and Y-Axis on joystick 2, the other joysticks are only there for the additional buttons. Buttons are automatically assigned to the joysticks. Currently Star Citizen allows up to 128 buttons per joystick ... 480 should be enough for our purpose.
+
+I had troubles inverting the roll movement in game, therefore I changed the mapping of the joystick to be inverted: 
+```
+yAxisJ2_ = map(yAxisJ2_,0,1023,510,0);
+```
+this is what it looks like when it is not inverted:
+```
+xAxisJ2_ = map(xAxisJ2_,0,1023,0,510);
+```
 
 #### Raspberry Pi
 ##### Initial Installation and Serial Port
