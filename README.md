@@ -122,7 +122,7 @@ while currently in the controller folder download the python script
 wget https://github.com/Haskar/Star_Citizen_Controller/blob/73856a0640aa27e27cd1c83eb386a9308fdb30a8/Raspberry%20Pi/controller/controller.py
 sudo chmod +x controller.py
 ```
-then change to the image folder and copy the desired color scheme of KorneliusVonTastik icons to it. There should be just files in that folder. No subfolders. 
+then change to the image folder and copy the desired color scheme of KorneliusVonTastik icons to it. There should be just files in that folder. No subfolders. I also made some images myself using KorneliusVonTastik's images.
 
 
 ##### Autostart Python Script 
