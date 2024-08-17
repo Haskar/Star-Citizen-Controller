@@ -2,13 +2,13 @@
 Disclaimer: This is my first published project ever, so expect the worst and maybe you will be surprised (but I wouldn't count on it)
 This is the repository of a 4-Axis Star Citizen Controller using a Raspberry pi and a Touchscreen as a Macropad
 
-<img src="https://github.com/Haskar/Star_Citizen_Controller/blob/main/pictures/Controller_front.jpg" width=900/>
+<img src="https://github.com/Haskar/Star_Citizen_Controller/blob/main/pictures/Controller_front.jpg" width=750/>
 
 
 <p float="left">
-  <img src="https://github.com/Haskar/Star_Citizen_Controller/blob/main/pictures/Controller_side.jpg" width="300" />
-  <img src="https://github.com/Haskar/Star_Citizen_Controller/blob/main/pictures/Controller_back.jpg" width="300" /> 
-  <img src="https://github.com/Haskar/Star_Citizen_Controller/blob/main/pictures/Controller_back_2.jpg" width="300" />
+  <img src="https://github.com/Haskar/Star_Citizen_Controller/blob/main/pictures/Controller_side.jpg" width="250" />
+  <img src="https://github.com/Haskar/Star_Citizen_Controller/blob/main/pictures/Controller_back.jpg" width="250" /> 
+  <img src="https://github.com/Haskar/Star_Citizen_Controller/blob/main/pictures/Controller_back_2.jpg" width="250" />
 </p>
 
 ## Intro and credits
