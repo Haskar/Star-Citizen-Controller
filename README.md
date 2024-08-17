@@ -31,10 +31,11 @@ The icons have been designed by KorneliusVonTastik and can be downloaded here [h
 some cables, some connectors, a prototype-boards or a breadboard, ... you will figure this out.
 
 If you want to use my 3d printed files you will need
-*25x M3x10mm screws (I love screws)
-*1x M3x16mm screw
-*26x M3 square nuts (they are 5,2mmx5,2mm and ~1.4mm thick) 
-*4x M2,5x7mm screws for the touch screen. (M2,5x8mm should also fit - try at your own risk)
+* 25x M3x10mm screws (I love screws) (24 for iteration 2)
+* 1x M3x16mm screw (iteration 2 of the does not need this screw anymore)
+* 26x M3 square nuts (they are 5,2mmx5,2mm and ~1.4mm thick) 
+* 4x M2,5x7mm screws for the touch screen. (M2,5x8mm should also fit - try at your own risk)
+* Some thin EVA foam because, as it turns out ... plastic is quite hard and does not feel so good on your wrist after a while ... 
 and a little bit of 3mm filament as dowels for the button-panels. You could also probably print those or mount the button somewhere else.
 
 ## Instructions
