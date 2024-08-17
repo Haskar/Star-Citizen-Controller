@@ -10,6 +10,7 @@ This is the repository of a 4-Axis Star Citizen Controller using a Raspberry pi 
   <img src="https://github.com/Haskar/Star_Citizen_Controller/blob/main/pictures/Controller_back.jpg" width="250" /> 
   <img src="https://github.com/Haskar/Star_Citizen_Controller/blob/main/pictures/Controller_back_2.jpg" width="250" />
 </p>
+The hot-glue work on those connectors look much better in real life ... I was actually pretty proud of it ... it looks like a trainwreck in these pictures :(
 
 ## Intro and credits
 The work is based on a controller by [Tinker Player Solder Pi](https://www.youtube.com/@TinkerPlayerSolderPi) 
