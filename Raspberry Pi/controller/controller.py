@@ -3,21 +3,29 @@ import sys
 import serial
 import time
 import os
+import threading
+import subprocess
+import pyglet
 from PIL import ImageTk, Image
-from subprocess import call
+from functools import partial
 
 script_dir = os.path.dirname(__file__) #<-- absolute dir the script is in
-rel_path = "images/"
-img_files_path = os.path.join(script_dir, rel_path)
+img_path = "images/"
+img_files_path = os.path.join(script_dir, img_path)
+
+#font_path = "font/UAV-OSD-Sans-Mono.ttf"
+#font_file_path = os.path.join(script_dir, font_path)
 
 arduino = serial.Serial(port='/dev/ttyS0', baudrate=115200, timeout=0.1) 
 
-b_font = "arial"
-b_font_size = 24
-b_font_type = "bold"
-b_width=144 #126
-b_height=148
-b_c_text = "#000000"
+#pyglet.font.add_file(font_path)
+b_font = "UAV OSD Sans Mono"
+#b_font = "arial"
+b_font_size = 13
+b_font_type = "normal"
+b_width=144 #144
+b_height=148 #148
+b_c_text = "#FFFFFF"
 b_c_bg = "#000000"
 b_b =0
 b_hl_t = 0
@@ -40,6 +48,16 @@ def create_button(frame, b_text, image_obj, b_event_id, image_width, image_heigh
   button.bind("<ButtonRelease-1>", lambda event, i=str(b_event_id*-1): button_on_release(event, i))
   return button
 
+def create_button_toggle_on(frame, b_text, image_obj, b_event_id, image_width, image_height):
+  button=tkinter.Button(frame, text=b_text, image=image_obj, compound="center", font=(b_font, b_font_size, b_font_type), width=b_width, height=b_height, foreground=b_c_text, activeforeground=b_c_text, background=b_c_bg, activebackground=b_c_bg, border=b_b, highlightthickness=b_hl_t)
+  button.bind("<ButtonPress-1>", lambda event, i=str(b_event_id):  button_on_press(event, i))
+  return button
+
+def create_button_toggle_off(frame, b_text, image_obj, b_event_id, image_width, image_height):
+  button=tkinter.Button(frame, text=b_text, image=image_obj, compound="center", font=(b_font, b_font_size, b_font_type), width=b_width, height=b_height, foreground=b_c_text, activeforeground=b_c_text, background=b_c_bg, activebackground=b_c_bg, border=b_b, highlightthickness=b_hl_t)
+  button.bind("<ButtonPress-1>", lambda event, i=str(b_event_id*-1): button_on_press(event, i))
+  return button
+
 def button_on_press(event, i):
   arduino.write(bytes(i, 'utf-8'))
   arduino.write(bytes("x", 'utf-8'))
@@ -51,11 +69,48 @@ def button_on_release(event, i):
 def close_gui():
   sys.exit()
 
-def shutdown():
-  call("sudo shutdown -h now", shell=True)
+def shutdown(textbox=None):
+  threading.Thread(target=shutdown_thread, args=[textbox]).start()
+
+def shutdown_thread(textbox=None):
+  process = subprocess.Popen("sudo shutdown -h now", shell=True, stdout=subprocess.PIPE, bufsize=1, text=True)
+  while process.poll() is None:
+    msg = process.stdout.readline().strip()  # read a line from the process output
+    if msg:
+      textbox.insert(tkinter.END, msg + "\n")
+
+  #c_shutdown = subprocess.run("sudo shutdown -h now",shell=True, stdout=subprocess.PIPE)
+  #print(c_shutdown.stdout.decode())
+  #call("sudo shutdown -h now", shell=True)
+
+
+def update_rpi(textbox=None):
+  threading.Thread(target=update_rpi_thread, args=[textbox]).start()
+
+def update_rpi_thread(textbox=None):
+  #c_update = subprocess.run("sudo apt-get update -y && sudo apt-get upgrade -y",shell=True, stdout=subprocess.PIPE)
+  c_update = subprocess.Popen("sudo apt-get update -y && sudo apt-get upgrade -y", shell=True, stdout=subprocess.PIPE, bufsize=1, text=True)
+  while c_update.poll() is None:
+    msg = c_update.stdout.readline().strip()  # read a line from the process output
+    if msg:
+      textbox.insert(tkinter.END, msg + "\n")
+  textbox.insert(tkinter.END,"\n"+"---- UPDATE FINISHED ----"+"\n")
+#  print(c_update.stdout.decode())
 
 def raise_frame(frame):
   frame.tkraise()
+
+class Redirect():
+
+    def __init__(self, widget):
+        self.widget = widget
+
+    def write(self, text):
+        self.widget.insert('end', text)
+        self.widget.see('end') # autoscroll
+
+    def flush(self):
+        pass
 
 master=tkinter.Tk()
 master.title("Controller")
@@ -76,20 +131,25 @@ frame002.configure(background=b_c_bg)
 frame003= tkinter.Frame(master)
 frame003.configure(background=b_c_bg)
 
-#Scan
-frame005= tkinter.Frame(master)
-frame005.configure(background=b_c_bg)
-
 #Emotes
 frame004= tkinter.Frame(master)
 frame004.configure(background=b_c_bg)
 frame014= tkinter.Frame(master)
 frame014.configure(background=b_c_bg)
 
+#Scan
+frame005= tkinter.Frame(master)
+frame005.configure(background=b_c_bg)
+
+#Info
+frame_info= tkinter.Frame(master)
+frame_info.configure(background=b_c_bg)
+
+
 frame_Settings= tkinter.Frame(master)
 frame_Settings.configure(background=b_c_bg)
 
-for frame in (frame001, frame002, frame003, frame004, frame014, frame005, frame_Settings):
+for frame in (frame001, frame002, frame003, frame004, frame014, frame005, frame_info, frame_Settings):
     frame.grid(row=4, column=7, sticky='news')
 
 
@@ -97,8 +157,12 @@ i_general_ui_previous = resize_image("general-ui_previous.png", i_width, i_heigh
 i_general_ui_next = resize_image("general-ui_next.png", i_width, i_height)
 i_general_ui_home = resize_image("general-ui-home.png", i_width, i_height)
 i_general_ui_quit = resize_image("general-ui-quit.png", i_width, i_height)
-i_general_ui_shutdown = resize_image("flight-power_exit-icon.png", i_width, i_height)
+i_general_ui_desktop = resize_image("general-ui_button_desktop.png", i_width, i_height)
+i_general_ui_update = resize_image("general-ui_button_update.png", i_width, i_height)
+i_general_ui_shutdown = resize_image("general-ui_button_shutdown.png", i_width, i_height)
 i_empty = resize_image("head-tracking-voip-foip_empty.png", i_width, i_height)
+i_general_dark = resize_image("general-ui-button-dark.png", i_width, i_height)
+i_general_bright = resize_image("general-ui-button-bright.png", i_width, i_height)
 
 i_flight_power_engine_icon = resize_image("flight-power_engine-icon.png", i_width, i_height)
 i_flight_power_power_icon = resize_image("flight-power_power-icon.png", i_width, i_height)
@@ -147,8 +211,9 @@ button_001_23.grid(row=1,column=3)
 trigger = trigger+1
 
 #Lights
+trigger_Lights = trigger
 i_lights_light_icon = resize_image("lights_light-icon.png", i_width, i_height)
-button_001_15=create_button(frame001, "", i_lights_light_icon, trigger, i_width, i_height)
+button_001_15=create_button(frame001, "", i_lights_light_icon, trigger_Lights, i_width, i_height)
 button_001_15.grid(row=1,column=5)
 trigger = trigger+1
 
@@ -159,26 +224,30 @@ button_001_15.grid(row=1,column=4)
 trigger = trigger+1
 
 #Scan
+trigger_Scan= trigger
 i_vehicle_scanning_scan_icon = resize_image("vehicle-scanning_scan-icon.png", i_width, i_height)
-button_001_43=create_button(frame001, "", i_vehicle_scanning_scan_icon, trigger, i_width, i_height)
+button_001_43=create_button(frame001, "", i_vehicle_scanning_scan_icon, trigger_Scan, i_width, i_height)
 button_001_43.grid(row=4,column=3)
 trigger = trigger+1
 
 #Activate SCM Mode
+trigger_SCM_Mode = trigger
 i_flight_movement_scm_mode_icon = resize_image("flight-movement_scm-mode-icon.png", i_width, i_height)
-button_001_44=create_button(frame001, "", i_flight_movement_scm_mode_icon, trigger, i_width, i_height)
+button_001_44=create_button(frame001, "", i_flight_movement_scm_mode_icon, trigger_SCM_Mode, i_width, i_height)
 button_001_44.grid(row=4,column=4)
 trigger = trigger+1
 
 #Activate NAV Mode
+trigger_NAV_Mode = trigger
 i_flight_movement_nav_mode_icon = resize_image("flight-movement_nav-mode-icon.png", i_width, i_height)
-button_001_45=create_button(frame001, "", i_flight_movement_nav_mode_icon, trigger, i_width, i_height)
+button_001_45=create_button(frame001, "", i_flight_movement_nav_mode_icon, trigger_NAV_Mode, i_width, i_height)
 button_001_45.grid(row=4,column=5)
 trigger = trigger+1
 
 #MAP
+trigger_Map = trigger
 i_mobiglass_sky_map = resize_image("mobiglass_sky-map.png", i_width, i_height)
-button_001_46=create_button(frame001, "", i_mobiglass_sky_map, trigger, i_width, i_height)
+button_001_46=create_button(frame001, "", i_mobiglass_sky_map, trigger_Map, i_width, i_height)
 button_001_46.grid(row=4,column=6)
 trigger = trigger+1
 
@@ -217,9 +286,9 @@ trigger = trigger+1
 
 #Emote
 i_general_ui_emote = resize_image("general-ui-emote.png", i_width, i_height)
-button_001_Mining=tkinter.Button(frame001, text="", image=i_general_ui_emote, compound="center", command=lambda:raise_frame(frame004), font=(b_font, b_font_size, b_font_type),
+button_001_Emote=tkinter.Button(frame001, text="", image=i_general_ui_emote, compound="center", command=lambda:raise_frame(frame004), font=(b_font, b_font_size, b_font_type),
 width=b_width, height=b_height, foreground=b_c_text, activeforeground=b_c_text, background=b_c_bg, activebackground=b_c_bg, border=b_b, highlightthickness=b_hl_t)
-button_001_Mining.grid(row=4,column=7)
+button_001_Emote.grid(row=4,column=7)
 
 #Accept
 i_social_general_accept = resize_image("social-general-accept.png", i_width, i_height)
@@ -233,11 +302,67 @@ button_001_42=create_button(frame001, "", i_social_general_reject, trigger, i_wi
 button_001_42.grid(row=4,column=2)
 trigger = trigger+1
 
-#Look Behind
-i_vehicles_cockpit_lookbehind = resize_image("vehicles_cockpit_lookbehind.png", i_width, i_height)
-button_001_25=create_button(frame001, "", i_vehicles_cockpit_lookbehind, trigger, i_width, i_height)
-button_001_25.grid(row=2,column=5)
+#Look Behind ON/OFF
+i_vehicles_cockpit_lookbehind_on = resize_image("vehicles_cockpit_lookbehind_ON.png", i_width, i_height)
+button_001_16=create_button_toggle_on(frame001, "", i_vehicles_cockpit_lookbehind_on, trigger, i_width, i_height)
+button_001_16.grid(row=1,column=6)
+
+i_vehicles_cockpit_lookbehind_off = resize_image("vehicles_cockpit_lookbehind_OFF.png", i_width, i_height)
+button_001_26=create_button_toggle_off(frame001, "", i_vehicles_cockpit_lookbehind_off, trigger, i_width, i_height)
+button_001_26.grid(row=2,column=6)
 trigger = trigger+1
+
+#Info
+i_general_ui_info = resize_image("misc_display-info-icon.png", i_width, i_height)
+button_001_info=tkinter.Button(frame001, text="", image=i_general_ui_info, compound="center", command=lambda:raise_frame(frame_info), font=(b_font, b_font_size, b_font_type),
+width=b_width, height=b_height, foreground=b_c_text, activeforeground=b_c_text, background=b_c_bg, activebackground=b_c_bg, border=b_b, highlightthickness=b_hl_t)
+button_001_info.grid(row=3,column=7)
+
+
+#Info Frame
+
+i_aaron_halo_info_original = Image.open(os.path.join(img_files_path,"Aaron_Halo.png"))
+i_aaron_halo_info_resize = i_aaron_halo_info_original.resize((1020, 448))
+i_aaron_halo_info = ImageTk.PhotoImage(i_aaron_halo_info_resize)
+
+label_aaron_halo = tkinter.Label(frame_info, image = i_aaron_halo_info)
+label_aaron_halo.grid(row=1,column=1, rowspan=3, columnspan=7)
+
+#button_dummy=create_button(frame_info, "", i_empty, 255, i_width, i_height)
+#button_dummy.grid(row=1,column=1)
+
+#button_dummy=create_button(frame_info, "", i_empty, 255, i_width, i_height)
+#button_dummy.grid(row=2,column=1)
+
+#button_dummy=create_button(frame_info, "", i_empty, 255, i_width, i_height)
+#button_dummy.grid(row=3,column=1)
+
+button_dummy=create_button(frame_info, "", i_empty, 255, i_width, i_height)
+button_dummy.grid(row=4,column=1)
+
+button_dummy=create_button(frame_info, "", i_empty, 255, i_width, i_height)
+button_dummy.grid(row=4,column=2)
+
+button_dummy=create_button(frame_info, "", i_empty, 255, i_width, i_height)
+button_dummy.grid(row=4,column=3)
+
+#Activate SCM Mode
+button_info_44=create_button(frame_info, "", i_flight_movement_scm_mode_icon, trigger_SCM_Mode, i_width, i_height)
+button_info_44.grid(row=4,column=4)
+
+#Activate NAV Mode
+button_info_45=create_button(frame_info, "", i_flight_movement_nav_mode_icon, trigger_NAV_Mode, i_width, i_height)
+button_info_45.grid(row=4,column=5)
+
+#MAP
+button_info_46=create_button(frame_info, "", i_mobiglass_sky_map, trigger_Map, i_width, i_height)
+button_info_46.grid(row=4,column=6)
+
+#HOME
+button_info_home=tkinter.Button(frame_info, text="", image=i_general_ui_home, compound="center", command=lambda:raise_frame(frame001), font=(b_font, b_font_size, b_font_type),
+width=b_width, height=b_height, foreground=b_c_text, activeforeground=b_c_text, background=b_c_bg, activebackground=b_c_bg, border=b_b, highlightthickness=b_hl_t)
+button_info_home.grid(row=4,column=7)
+
 
 #Settings Frame
 i_general_ui_settings = resize_image("general-ui-settings.png", i_width, i_height)
@@ -245,15 +370,17 @@ button_001_Settings=tkinter.Button(frame001, text="", image=i_general_ui_setting
 width=b_width, height=b_height, foreground=b_c_text, activeforeground=b_c_text, background=b_c_bg, activebackground=b_c_bg, border=b_b, highlightthickness=b_hl_t)
 button_001_Settings.grid(row=1,column=7)
 
-#Close
+#Shutdown
 button_shutdown=tkinter.Button(frame_Settings, text="", image=i_general_ui_quit, compound="center", command=shutdown, font=(b_font, b_font_size, b_font_type), 
 width=b_width, height=b_height, foreground=b_c_text, activeforeground=b_c_text, background=b_c_bg, activebackground=b_c_bg, border=b_b, highlightthickness=b_hl_t)
 button_shutdown.grid(row=1,column=1)
 
-button_close=tkinter.Button(frame_Settings, text="", image=i_general_ui_shutdown, compound="center", command=close_gui, font=(b_font, b_font_size, b_font_type),
+#DESKTOP
+button_close=tkinter.Button(frame_Settings, text="", image=i_general_ui_desktop, compound="center", command=close_gui, font=(b_font, b_font_size, b_font_type),
 width=b_width, height=b_height, foreground=b_c_text, activeforeground=b_c_text, background=b_c_bg, activebackground=b_c_bg, border=b_b, highlightthickness=b_hl_t)
 button_close.grid(row=1,column=2)
 
+#DUMMYs
 button_dummy=create_button(frame_Settings, "", i_empty, 255, i_width, i_height)
 button_dummy.grid(row=2,column=1)
 
@@ -278,10 +405,22 @@ button_dummy.grid(row=4,column=5)
 button_dummy=create_button(frame_Settings, "", i_empty, 255, i_width, i_height)
 button_dummy.grid(row=4,column=6)
 
+#OUTPUT
+text_output=tkinter.Text(frame_Settings, bg=b_c_bg, fg=b_c_text, font=(b_font, b_font_size, b_font_type), height=1, width=1)
+text_output.grid(row=2,column=1, rowspan=2, columnspan=7, sticky=tkinter.N+tkinter.S+tkinter.W+tkinter.E)
+old_stdout = sys.stdout
+sys.stdout = Redirect(text_output)
+
+#Update
+#button_update=tkinter.Button(frame_Settings, text="", image=i_general_ui_update, compound="center", command=update_rpi, font=(b_font, b_font_size, b_font_type),
+button_update=tkinter.Button(frame_Settings, text="", image=i_general_ui_update, compound="center", command=partial(update_rpi,text_output), font=(b_font, b_font_size, b_font_type),
+width=b_width, height=b_height, foreground=b_c_text, activeforeground=b_c_text, background=b_c_bg, activebackground=b_c_bg, border=b_b, highlightthickness=b_hl_t)
+button_update.grid(row=1,column=3)
+
+#HOME
 button_home=tkinter.Button(frame_Settings, text="", image=i_general_ui_home, compound="center", command=lambda:raise_frame(frame001), font=(b_font, b_font_size, b_font_type),
 width=b_width, height=b_height, foreground=b_c_text, activeforeground=b_c_text, background=b_c_bg, activebackground=b_c_bg, border=b_b, highlightthickness=b_hl_t)
 button_home.grid(row=4,column=7)
-
 
 #Salvage Frame
 trigger = 60
@@ -294,6 +433,9 @@ i_vehicles_salvage_tractor_beam_mode_icon = resize_image("vehicles-salvage_tract
 button_002_12=create_button(frame002, "", i_vehicles_salvage_tractor_beam_mode_icon, trigger, i_width, i_height)
 button_002_12.grid(row=1,column=2)
 trigger = trigger+1
+
+button_002_14=create_button(frame002, "", i_lights_light_icon, trigger_Lights, i_width, i_height)
+button_002_14.grid(row=1,column=4)
 
 i_vehicles_salvage_cut_mode_icon = resize_image("vehicles-salvage_cut-mode-icon.png", i_width, i_height)
 button_002_15=create_button(frame002, "", i_vehicles_salvage_cut_mode_icon, trigger, i_width, i_height)
@@ -362,7 +504,7 @@ trigger = trigger+1
 
 i_vehicles_salvage_gimball_icon = resize_image("vehicles-salvage_gimball-icon.png", i_width, i_height)
 button_002_41=create_button(frame002, "", i_vehicles_salvage_gimball_icon, trigger, i_width, i_height)
-button_002_41.grid(row=4,column=1)
+button_002_41.grid(row=4,column=4)
 trigger = trigger+1
 
 i_vehicles_salvage_free_gimball_icon = resize_image("vehicles-salvage_free-gimball-icon.png", i_width, i_height)
@@ -371,14 +513,17 @@ button_002_42.grid(row=4,column=2)
 trigger = trigger+1
 
 i_vehicles_salvage_cycle_structure_modifiers_icon = resize_image("vehicles-salvage_cycle-structure-modifiers-icon.png", i_width, i_height)
-button_002_43=create_button(frame002, "", i_vehicles_salvage_cycle_structure_modifiers_icon, trigger, i_width, i_height)
-button_002_43.grid(row=4,column=3)
+button_002_35=create_button(frame002, "", i_vehicles_salvage_cycle_structure_modifiers_icon, trigger, i_width, i_height)
+button_002_35.grid(row=3,column=5)
 trigger = trigger+1
 
 i_vehicles_salvage_focus_icon = resize_image("vehicles-salvage_focus-icon.png", i_width, i_height)
 button_002_44=create_button(frame002, "", i_vehicles_salvage_focus_icon, trigger, i_width, i_height)
-button_002_44.grid(row=4,column=4)
+button_002_44.grid(row=4,column=1)
 trigger = trigger+1
+
+button_002_43=create_button(frame002, "", i_vehicle_scanning_scan_icon, trigger_Scan, i_width, i_height)
+button_002_43.grid(row=4,column=3)
 
 i_vehicles_salvage_salvage_beam_axis_toggle_icon = resize_image("vehicles-salvage_salvage-beam-axis-toggle-icon.png", i_width, i_height)
 button_002_45=create_button(frame002, "", i_vehicles_salvage_salvage_beam_axis_toggle_icon, trigger, i_width, i_height)
@@ -704,3 +849,4 @@ button_014_home.grid(row=4,column=7)
 raise_frame(frame001)
 
 master.mainloop()
+sys.stdout = old_stdout
