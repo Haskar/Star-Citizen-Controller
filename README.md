@@ -66,7 +66,7 @@ sidenote: this is my first schematic drawn with fritzing
 
 ### Step2: Software
 #### Arduino
-Write the [Star_Citizen_Controller.ino](https://github.com/Haskar/Star_Citizen_Controller/blob/713848e760347bb48a67777979dcc065e503b604/Arduino/Star_Citizen_Controller.ino)) to your Arduino. Once restarted it will create 4 Joysticks with 120 buttons each (up to 4 Joysticks work "stable" on windows). With one X- and Y-Axis  on joystick 1 and one X- and Y-Axis on joystick 2, the other joysticks are only there for the additional buttons. Buttons are automatically assigned to the joysticks. Currently Star Citizen allows up to 128 buttons per joystick ... 480 should be enough for our purpose.
+Write the [Star_Citizen_Controller.ino](https://github.com/Haskar/Star_Citizen_Controller/blob/713848e760347bb48a67777979dcc065e503b604/Arduino/Star_Citizen_Controller.ino) to your Arduino. Once restarted it will create 4 Joysticks with 120 buttons each (up to 4 Joysticks work "stable" on windows). With one X- and Y-Axis  on joystick 1 and one X- and Y-Axis on joystick 2, the other joysticks are only there for the additional buttons. Buttons are automatically assigned to the joysticks. Currently Star Citizen allows up to 128 buttons per joystick ... 480 should be enough for our purpose.
 
 #### Raspberry Pi
 ##### Initial Installation and Serial Port
@@ -187,7 +187,7 @@ What you need to know:
   for frame in (frame_name1, frame_name3, frame_name3)
   ```  
   You don't have to do anything else actually to add pages.
-* I use 2 buttons:
+* I mainly use 4 buttons:
   Buttons used as "Joystick"-Buttons
    ```
    i_flight_movement_gear_up_icon = resize_image("flight-movement_gear-up-icon.png", i_width, i_height)
@@ -200,7 +200,14 @@ What you need to know:
    third line declares the place on the page where the button should be. There are 4 rows and 7 columns available.
    fourth line is to ingrement the trigger-number. At the beginning of every page I declare the trigger a specific number. In case I f*** up in the code I would not have to assign every button again... just max. 28. first frame starts with button 30 to have a little bit of spare buttons in case I want to .. I don't know why actually.
 
-   And Buttons used to change between pages:
+   A variation of the buttons that function more like a switch (one for "Rear Cam ON" and one for "Rear Cam OFF") so I dont have to keep it pressed
+   ```
+   button_name=create_button_toggle_on(frame_name, "", i_vehicles_cockpit_lookbehind_on, trigger, i_width, i_height)
+   button_name=create_button_toggle_off(frame_name, "", i_vehicles_cockpit_lookbehind_off, trigger, i_width, i_height)
+   ```
+   it is basically the same as the button above, just remember not to increase the toggle-counter between these two
+
+   Buttons used to change between pages:
    ```
    i_general_ui_settings = resize_image("general-ui-settings.png", i_width, i_height)
    button_Settings=tkinter.Button(frame_name, text="", image=i_general_ui_settings, compound="center", command=lambda:raise_frame(frame_Settings), font=(b_font, b_font_size,     b_font_type), width=b_width, height=b_height, foreground=b_c_text, activeforeground=b_c_text, background=b_c_bg, activebackground=b_c_bg, border=b_b, highlightthickness=b_hl_t)
@@ -208,13 +215,18 @@ What you need to know:
    ```
    This button will switch to the "frame_Settings" page.
 
-   There is actually a third button type which does both. The Button that activates the Salvage Mode will also switch to a page with all Salvage Mode Buttons. 
+   And a fourth button type which does both (change frame and push a button). The Button that activates the Salvage Mode will also switch to a page with all Salvage Mode Buttons. 
 
 * The 4x7 buttons grid will only be a 4x7 buttons grid if you have a button ... or something like a button in every cell of one column AND one row. Thats why you will find Dummy Buttons... especially on the settings-page :
    ```
    button_dummy=create_button(frame_Settings, "", i_empty, 255, i_width, i_height)
    button_dummy.grid(row=2,column=1)
    ```
+* The Settings page will also let you shut off the Raspi, exit the python script and update your raspbian using
+   ```
+   sudo apt-get update -y && sudo apt-get upgrade -y
+   ```
+   Results will be shown in the texbox below the first row of buttons.
 
-
+* There is also a "DISPL INFO" Button in the Main Menu. My plan is to include some 3rd party information that I need while playing. I implemented a helpfull graph of [Aaron Halo Travel Routes by CaptSheppard](https://cstone.space/resources/knowledge-base/36-refinery-to-aaron-halo-mining-routes). I had to crop and distort the image so keep it readable. If you add pictures keep in mind that, if you want to have one row on buttons, the image should be around 1020x448px (or should at least have a similar ratio)
   
