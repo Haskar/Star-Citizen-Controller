@@ -1,12 +1,12 @@
 #include <Joystick.h>
 
-#define JOYX A0
-#define JOYY A1
-#define JOYTHROTTLE A2
-#define JOYRUDDER A3
+#define JOY1X A2
+#define JOY1Y A3
+#define JOY2X A1
+#define JOY2Y A0
 #define JOYSTICK_COUNT 4
 #define MAX_BUTTONS 120
-#define MAIN_JOYSTICK 0
+#define PRIM_JOYSTICK 0
 #define SEC_JOYSTICK 1
 //Defining the Joystick
 //The Joystick is defined in the following setup:
@@ -36,10 +36,10 @@ Joystick_ Joystick[JOYSTICK_COUNT] = {
 
 const bool initAutoSendState = true;
 
-int xAxis_ = 0;
-int yAxis_ = 0;
-int Throttle_ = 0;
-int Rudder_ = 0;
+int xAxisJ1_ = 0;
+int yAxisJ1_ = 0;
+int xAxisJ2_ = 0;
+int yAxisJ2_ = 0;
 int index = 0;
 
 void setup() {
@@ -53,6 +53,10 @@ void setup() {
     if (initAutoSendState)
     {
       Joystick[index].begin();
+      for (int button_index = 0; button_index < MAX_BUTTONS; button_index++)
+      { 
+        Joystick[index].setButton(button_index, 0);
+      }
     }
     else
     {
@@ -66,21 +70,21 @@ void setup() {
 void loop() {
 
   // put your main code here, to run repeatedly:
-  xAxis_ = analogRead(JOYX);
-  xAxis_ = map(xAxis_,0,1023,0,510);
-  Joystick[MAIN_JOYSTICK].setXAxis(xAxis_);
+  xAxisJ1_ = analogRead(JOY1X);
+  xAxisJ1_ = map(xAxisJ1_,0,1023,510,0);
+  Joystick[PRIM_JOYSTICK].setXAxis(xAxisJ1_);
 
-  yAxis_ = analogRead(JOYY);
-  yAxis_ = map(yAxis_,0,1023,0,510);
-  Joystick[MAIN_JOYSTICK].setYAxis(yAxis_);
+  yAxisJ1_ = analogRead(JOY1Y);
+  yAxisJ1_ = map(yAxisJ1_,0,1023,510,0);
+  Joystick[PRIM_JOYSTICK].setYAxis(yAxisJ1_);
 
-  Throttle_ = analogRead(JOYTHROTTLE);
-  Throttle_ = map(Throttle_,0,1023,0,510);
-  Joystick[SEC_JOYSTICK].setYAxis(Throttle_);
+  xAxisJ2_ = analogRead(JOY2X);
+  xAxisJ2_ = map(xAxisJ2_,0,1023,0,510);
+  Joystick[SEC_JOYSTICK].setYAxis(xAxisJ2_);
 
-  Rudder_ = analogRead(JOYRUDDER);
-  Rudder_ = map(Rudder_,0,1023,0,510);
-  Joystick[SEC_JOYSTICK].setXAxis(Rudder_);
+  yAxisJ2_ = analogRead(JOY2Y);
+  yAxisJ2_ = map(yAxisJ2_,0,1023,510,0);
+  Joystick[SEC_JOYSTICK].setXAxis(yAxisJ2_);
   
   
  
